@@ -2,8 +2,8 @@ import SwiftUI
 import SpriteKit
 
 struct ContentView: View {
-    @State var connectionsLabel: String
-    @State var backgroundColor: Color
+    @State var connectionsLabel: String = ""
+    @State var backgroundColor: Color = .purple
     let multipeer = MultipeerService()
     
     @State var scene: GameScene = GameScene(size: CGSize(width: 300, height: 400))
