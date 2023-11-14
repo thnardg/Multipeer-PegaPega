@@ -3,19 +3,23 @@ import SpriteKit
 
 struct ContentView: View {
     @State var connectionsLabel: String = ""
+    @State var connectedDevices: String = ""
     @State var backgroundColor: Color = .purple
     let multipeer = MultipeerService()
     
+    // CENA
     @State var scene: GameScene = GameScene(size: CGSize(width: 300, height: 400))
     
     var body: some View {
         ZStack{
             backgroundColor.edgesIgnoringSafeArea(.all)
             VStack{
-                Text(self.connectionsLabel)
+                Text(connectedDevices)
                     .fontWeight(.bold)
                     .foregroundColor(.black)
                 Spacer()
+                
+                // FRAME DA SCENE
                 SpriteView(scene: scene)
                     .frame(width: 300, height: 400)
                 Spacer()
@@ -44,7 +48,7 @@ extension ContentView : MultipeerServiceDelegate {
     
     func connectedDevicesChanged(manager: MultipeerService, connectedDevices: [String]) {
         OperationQueue.main.addOperation {
-            self.connectionsLabel = "Connected devices: \(connectedDevices)"
+            self.connectedDevices = "\(connectedDevices)"
         }
     }
     

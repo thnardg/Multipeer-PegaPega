@@ -11,7 +11,7 @@ import SwiftUI
 struct teste_pegapegaApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HostView()
         }
     }
 }
