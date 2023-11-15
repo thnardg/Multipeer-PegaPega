@@ -15,6 +15,7 @@
 		2F79C1F12B03F42600C6AD99 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F79C1F02B03F42600C6AD99 /* Preview Assets.xcassets */; };
 		2F79C1F82B03F45F00C6AD99 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F79C1F72B03F45F00C6AD99 /* GameScene.swift */; };
 		2F79C1FA2B03F4AA00C6AD99 /* MultipeerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F79C1F92B03F4AA00C6AD99 /* MultipeerService.swift */; };
+		3B111BE22B0548CD001BE8A4 /* PushNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B111BE12B0548CD001BE8A4 /* PushNotification.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,8 @@
 		2F79C1F72B03F45F00C6AD99 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		2F79C1F92B03F4AA00C6AD99 /* MultipeerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerService.swift; sourceTree = "<group>"; };
 		2F79C1FB2B03F4E100C6AD99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		3B111BE12B0548CD001BE8A4 /* PushNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotification.swift; sourceTree = "<group>"; };
+		3B111BE32B0548F2001BE8A4 /* Multipeer-PegaPega.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Multipeer-PegaPega.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +63,7 @@
 		2F79C1E82B03F42500C6AD99 /* Multipeer-PegaPega */ = {
 			isa = PBXGroup;
 			children = (
+				3B111BE32B0548F2001BE8A4 /* Multipeer-PegaPega.entitlements */,
 				2F79C1FB2B03F4E100C6AD99 /* Info.plist */,
 				2F79C1E92B03F42500C6AD99 /* Multipeer_PegaPegaApp.swift */,
 				2F79C1EB2B03F42500C6AD99 /* ContentView.swift */,
@@ -67,6 +71,7 @@
 				2F79C1F72B03F45F00C6AD99 /* GameScene.swift */,
 				2F79C1F92B03F4AA00C6AD99 /* MultipeerService.swift */,
 				26B1F7B82B04087B007BE3D4 /* PeerDevice.swift */,
+				3B111BE02B0548BA001BE8A4 /* Permissions */,
 				2F79C1ED2B03F42600C6AD99 /* Assets.xcassets */,
 				2F79C1EF2B03F42600C6AD99 /* Preview Content */,
 			);
@@ -79,6 +84,14 @@
 				2F79C1F02B03F42600C6AD99 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		3B111BE02B0548BA001BE8A4 /* Permissions */ = {
+			isa = PBXGroup;
+			children = (
+				3B111BE12B0548CD001BE8A4 /* PushNotification.swift */,
+			);
+			path = Permissions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -151,6 +164,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B111BE22B0548CD001BE8A4 /* PushNotification.swift in Sources */,
 				2F79C1F82B03F45F00C6AD99 /* GameScene.swift in Sources */,
 				2F79C1FA2B03F4AA00C6AD99 /* MultipeerService.swift in Sources */,
 				2F79C1EC2B03F42500C6AD99 /* ContentView.swift in Sources */,
@@ -287,17 +301,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Multipeer-PegaPega/Multipeer-PegaPega.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Multipeer-PegaPega/Preview Content\"";
-				DEVELOPMENT_TEAM = 5GYXF2FP9Y;
+				DEVELOPMENT_TEAM = T46F5AK653;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Multipeer-PegaPega/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -317,17 +332,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Multipeer-PegaPega/Multipeer-PegaPega.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Multipeer-PegaPega/Preview Content\"";
-				DEVELOPMENT_TEAM = 5GYXF2FP9Y;
+				DEVELOPMENT_TEAM = T46F5AK653;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Multipeer-PegaPega/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

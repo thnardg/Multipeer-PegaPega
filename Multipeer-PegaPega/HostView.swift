@@ -12,6 +12,7 @@ struct HostView: View {
     @StateObject private var sessionController = MultipeerService()
     @State private var connectedPeers: [String] = []
     @State private var connectionLabel: String = ""
+    @State private var isGameStarted = false
     
     var body: some View {
         VStack {
@@ -44,23 +45,32 @@ struct HostView: View {
             }
             
             Spacer()
-            
+            Button("Iniciar Jogo"){
+                isGameStarted = true
+            }
+            //.disabled(connectedPeers.count > 2)
             Text("JOGADORES")
                 .font(.title2)
-            Text("\(connectedPeers.count) / 7")
+            Text("\(connectedPeers.count + (sessionController.isAdvertising || sessionController.connectState ? 1 : 0)) / 7")
                 .font(.largeTitle)
                 .bold()
             Text("conectados: \(connectionLabel)")
             Spacer()
             ScrollView(.horizontal) {
                 HStack(spacing: 10) {
+                    if sessionController.isAdvertising || sessionController.connectState{
+                        PeerCard(peerName: "You", playerNumber: 1)
+                    }
                     ForEach(0..<connectedPeers.count, id: \.self) { index in
                         let peerName = connectedPeers[index]
-                        PeerCard(peerName: peerName, playerNumber: index + 1)
+                        PeerCard(peerName: peerName, playerNumber: index + 2)
+                        let _ = print("Connected Peers: \(connectedPeers.count)")
                     }
                 }
                 .padding(10)
             }
+            
+            
             Spacer()
             
             Text("Esperando jogadores...")
@@ -71,6 +81,10 @@ struct HostView: View {
             self.sessionController.delegate = self
         }
         .padding(.vertical, 30)
+        .fullScreenCover(isPresented: $isGameStarted){
+            ContentView(connectionsLabel: "Connected devices: ", backgroundColor: .yellow)
+                
+        }
     }
 }
 
@@ -90,7 +104,7 @@ struct PeerCard: View {
                 .padding(.bottom, 5)
             
             Circle()
-                .frame(width: 80, height: 80)
+                .frame(width: 40, height: 40)
                 .foregroundColor(.green)
         }
         .padding()

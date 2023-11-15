@@ -1,8 +1,6 @@
 import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
-    
-    // MARK: - VARIÁVEIS
     let multipeerService = MultipeerService()
     var playerNodes: [String: SKSpriteNode] = [:]
     let playerSpacing: CGFloat = 100 //espaçamento inicial entre os players (temporário)
@@ -10,7 +8,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameStarted: Bool = false
     var playersToAdd: [(peerID: String, color: UIColor)] = []
 
-    // MARK: - DID MOVE
+    
     override func didMove(to view: SKView) {
         self.backgroundColor = .white
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
@@ -22,17 +20,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.addChild(startButton!)
     }
 
-    // MARK: - TOUCHES ENDED
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
-        let location = touch.location(in: self)
+        override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+            guard let touch = touches.first else { return }
+            let location = touch.location(in: self)
 
-        if let node = self.atPoint(location) as? SKSpriteNode, node.name == "startButton" {
-            setupGame()
+            if let node = self.atPoint(location) as? SKSpriteNode, node.name == "startButton" {
+                setupGame()
+            }
         }
-    }
     
-    // MARK: - ADD JOGADORES
     func addPlayer(forPeer peerID: String, color: UIColor) {
             if gameStarted {
                 let newPlayer = NewPlayer(color: color, size: CGSize(width: 50, height: 50))
@@ -56,20 +52,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     
-    // MARK: - SETUP GAME
     func setupGame() {
             startButton?.removeFromParent()
             gameStarted = true
 
             for playerInfo in playersToAdd {
-                addPlayer(forPeer: playerInfo.peerID, 
-                          color: playerInfo.color)
+                addPlayer(forPeer: playerInfo.peerID, color: playerInfo.color)
             }
 
             playersToAdd.removeAll()
         }
     
-    // MARK: - MOVIMENTAÇÃO
     func moveNode(forPeer peerID: String, to position: CGPoint) {
             playerNodes[peerID]?.run(SKAction.move(to: position, duration: 0.1))
         }

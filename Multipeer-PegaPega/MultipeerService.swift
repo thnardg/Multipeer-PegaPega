@@ -15,7 +15,9 @@ class MultipeerService : NSObject, ObservableObject {
     private let myPeerID = MCPeerID(displayName: UIDevice.current.name)
     private var serviceAdvertiser : MCNearbyServiceAdvertiser
     private let serviceBrowser : MCNearbyServiceBrowser
+    private var invitedPeers = Set<MCPeerID>()
     
+    @Published var connectState:Bool = false
     @Published var peers: [PeerDevice] = []
     @Published var joinedPeer: [PeerDevice] = []
     @Published var selectedPeer: PeerDevice? { didSet { connect() } }
@@ -90,11 +92,10 @@ class MultipeerService : NSObject, ObservableObject {
             return
         }
         
-        if session.connectedPeers.contains(selectedPeer.peerID) {
-            joinedPeer.append(selectedPeer)
-        } else {
-            serviceBrowser.invitePeer(selectedPeer.peerID, to: session, withContext: nil, timeout: 60)
-        }
+        if !invitedPeers.contains(selectedPeer.peerID) {
+                    invitedPeers.insert(selectedPeer.peerID)
+                    serviceBrowser.invitePeer(selectedPeer.peerID, to: session, withContext: nil, timeout: 10)
+                }
     }
     
     // SHOW
@@ -124,15 +125,20 @@ extension MultipeerService : MCNearbyServiceBrowserDelegate {
     
     // Nearby service browser delegate
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String: String]?) {
-        if !peers.contains(where: { $0.peerID == peerID }) {
-            peers.append(PeerDevice(peerID: peerID))
-        }
-    }
+                NSLog("%@", "foundPeer: \(peerID)")
+                if !peers.contains(where: { $0.peerID == peerID }) && !session.connectedPeers.contains(peerID) && !invitedPeers.contains(peerID) {
+                    peers.append(PeerDevice(peerID: peerID))
+                    invitedPeers.insert(peerID)
+                    browser.invitePeer(peerID, to: self.session, withContext: nil, timeout: 10)
+                }
+            }
 
-    // Perda de conexão com um peer
-    func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        peers.removeAll(where: { $0.peerID == peerID })
-    }
+            // Perda de conexão com um peer
+            func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
+                NSLog("%@", "lostPeer: \(peerID)")
+                peers.removeAll(where: { $0.peerID == peerID })
+                invitedPeers.remove(peerID) // Também remova da lista de peers convidados
+            }
     
     func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {
         NSLog("%@", "didNotStartBrowsingForPeers: \(error)")
@@ -155,9 +161,11 @@ extension MultipeerService : MCSessionDelegate {
                 print("\(peerID) state: connecting")
             case .connected:
                 print("\(peerID) state: CONNECTED!")
+                self.connectState = true
                 //self.getListPeople()
             case .notConnected:
                 print("\(peerID) state: NOT CONNECTED!")
+                self.connectState = false
                 //self.getListPeople()
             @unknown default:
                 print("\(peerID) state: unknown")
