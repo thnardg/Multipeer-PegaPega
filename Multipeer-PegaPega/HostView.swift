@@ -49,22 +49,24 @@ struct HostView: View {
             }
             
             Divider()
-            
+          
             Text("JOGADORES")
                 .font(.title2)
-            Text("\(connectedPeers.count) / 7")
+            Text("\(connectedPeers.count + sessionController.peers.count) / 7")
                 .font(.largeTitle)
                 .bold()
             Text("conectados: \(connectedPeers.count)")
-            ForEach(sessionController.peers) { peer in
-                Text("Peer: \(peer.peerID.displayName), Host: \(peer.isHost ? "Sim" : "Não")")
-            }
+            Text("PEERWITHNODES: \(sessionController.peersWithNodes.count)")
+    
             Spacer()
             ScrollView(.horizontal) {
                 HStack(spacing: 10) {
-                    ForEach(0..<connectedPeers.count, id: \.self) { index in
+                    ForEach(0..<(connectedPeers.count), id: \.self) { index in
                         let peerName = connectedPeers[index]
                         PeerCard(peerName: peerName, playerNumber: index + 1)
+                    }
+                    if !sessionController.peers.isEmpty {
+                        PeerCard(peerName: "HOST", playerNumber: 0)
                     }
                 }
                 .padding(10)
@@ -113,6 +115,9 @@ extension HostView: MultipeerServiceDelegate {
         DispatchQueue.main.async {
             self.connectedPeers = connectedDevices
             print("connectedDevices: \(connectedDevices)")
+            print("PEERS: \(sessionController.peers)")
+            print("JOINED: \(sessionController.joinedPeer)")
+            print("WITHNODES: \(sessionController.peersWithNodes)")
             
         }
     }
