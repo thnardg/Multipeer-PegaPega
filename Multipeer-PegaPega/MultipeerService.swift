@@ -65,6 +65,12 @@ class MultipeerService : NSObject, ObservableObject {
             }
         }
     }
+    func updateLocalDeviceAsHost() {
+        let localPeerID = MCPeerID(displayName: UIDevice.current.name)
+        if let localDeviceIndex = peers.firstIndex(where: { $0.peerID == localPeerID }) {
+            peers[localDeviceIndex].isHost = true
+        }
+    }
     
     func startBrowsing() {
         print("começou a procurar dispositivos")
@@ -127,11 +133,15 @@ extension MultipeerService : MCNearbyServiceBrowserDelegate {
         if !peers.contains(where: { $0.peerID == peerID }) {
             peers.append(PeerDevice(peerID: peerID))
         }
+        
+        print("Detectado -> \(peerID) || \(browser.myPeerID)")
     }
 
     // Perda de conexão com um peer
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
         peers.removeAll(where: { $0.peerID == peerID })
+        
+        print("Perda de conexão -> \(peerID)")
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {

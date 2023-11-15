@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct teste_pegapegaApp: App {
+    @StateObject private var multipeerSession = MultipeerService()
+    
     var body: some Scene {
         WindowGroup {
             HostView()
+                .environmentObject(multipeerSession)
         }
     }
 }

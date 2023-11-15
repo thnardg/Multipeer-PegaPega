@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HostView: View {
     
-    @StateObject private var sessionController = MultipeerService()
+    @EnvironmentObject var sessionController : MultipeerService
     @State private var connectedPeers: [String] = []
     @State private var connectionLabel: String = ""
     
@@ -23,12 +23,17 @@ struct HostView: View {
                 .font(.subheadline)
                 .foregroundStyle(.black.opacity(0.5))
             
+            Spacer()
             
             if sessionController.peers.isEmpty {
                 Text("Procurando sessões...")
-                Toggle("Criar sessão", isOn: $sessionController.isAdvertising)
-                    .toggleStyle(.switch)
+                    .foregroundStyle(.gray)
+                Toggle(sessionController.isAdvertising ? "Hospedando!" : "Criar sessão", isOn: $sessionController.isAdvertising)
+                    .toggleStyle(.button)
                     .padding()
+                    .onChange(of: sessionController.isAdvertising) { _, isAdvertising in
+                        sessionController.updateLocalDeviceAsHost()
+                    }
             } else {
                 ForEach(sessionController.peers) { peer in
                     Button(action: {
@@ -43,14 +48,17 @@ struct HostView: View {
                 }
             }
             
-            Spacer()
+            Divider()
             
             Text("JOGADORES")
                 .font(.title2)
             Text("\(connectedPeers.count) / 7")
                 .font(.largeTitle)
                 .bold()
-            Text("conectados: \(connectionLabel)")
+            Text("conectados: \(connectedPeers.count)")
+            ForEach(sessionController.peers) { peer in
+                Text("Peer: \(peer.peerID.displayName), Host: \(peer.isHost ? "Sim" : "Não")")
+            }
             Spacer()
             ScrollView(.horizontal) {
                 HStack(spacing: 10) {
@@ -91,7 +99,7 @@ struct PeerCard: View {
             
             Circle()
                 .frame(width: 80, height: 80)
-                .foregroundColor(.green)
+                .foregroundColor(.purple)
         }
         .padding()
         .background(Color.white)
@@ -104,6 +112,7 @@ extension HostView: MultipeerServiceDelegate {
     func connectedDevicesChanged(manager: MultipeerService, connectedDevices: [String]) {
         DispatchQueue.main.async {
             self.connectedPeers = connectedDevices
+            print("connectedDevices: \(connectedDevices)")
             
         }
     }
@@ -121,4 +130,5 @@ extension HostView: MultipeerServiceDelegate {
 
 #Preview {
     HostView()
+        .environmentObject(MultipeerService())
 }
