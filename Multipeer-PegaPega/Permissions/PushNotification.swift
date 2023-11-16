@@ -11,6 +11,12 @@ import CloudKit
 
 class PushNotifications: ObservableObject {
     
+    func initCloud(){
+        requestNotificationPermission()
+        subscribeToNotifications()
+        sendNotification()
+    }
+    
     func requestNotificationPermission() {
         
         let options: UNAuthorizationOptions = [.alert, .sound, .badge]

@@ -12,6 +12,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let multipeerService = MultipeerService() // instancia do multiper service
     var playerNodes: [String: (node: SKSpriteNode, isSafe: Bool)] = [:]
     var hostPlayerID: String?
+    private let pushPush = PushNotifications()
 
     let playerSpacing: CGFloat = 200 // temp
     var gameOverLabel: SKLabelNode!
@@ -20,6 +21,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.backgroundColor = .black
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         self.physicsWorld.contactDelegate = self
+        
+        pushPush.initCloud()
         
         // Game Over label
         gameOverLabel = SKLabelNode(text: "Fim de jogo")
